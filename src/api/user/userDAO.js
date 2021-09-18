@@ -1,41 +1,19 @@
-import connectDb from "../../db/db";
-import DbHelper from "../../db/db-helper";
+import { create, getOne, getAll } from "../../db/mongo-api";
+import { userSchema } from "./userSchema";
 
-const userSchema = {
-  validator: {
-    $jsonSchema: {
-      bsonType: "object",
-      required: ["name", "email", "password"],
-      properties: {
-        name: {
-          bsonType: "string",
-          description: "must be a string and is required",
-        },
-        email: {
-          bsonType: "string",
-          description: "must be a string and is required",
-        },
-        password: {
-          bsonType: "string",
-          description: "must be a string and is required",
-        },
-      },
-    },
-  },
+const collectionName = "user";
+export const createUser = async (data) => {
+  const user = await create(collectionName, userSchema, data);
+  const id = user.insertedId;
+  const userData = await getOne(collectionName, id);
+  return userData;
+};
+export const getUsers = async () => {
+  const users = await getAll(collectionName);
+  return users;
 };
 
-
-
-  const userDB = new DbHelper("user", userSchema, connectDb);
-
-  export const createUser = async (data) => {
-    const user = await userDB.create(data);
-    return user;
-  };
-  //    const getUsers = async () => {
-
-  //   }
-
-  //   const getUser = async (id) => {
-  //       const
-  //   }
+export const getUser = async (id) => {
+  const user = await getOne(collectionName, id);
+  return user;
+};

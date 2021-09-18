@@ -15,10 +15,13 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/node": "^7.15.4",
+    "@babel/preset-env": "^7.15.6",
     "nodemon": "^2.0.12"
   },
   "scripts": {
-    "dev": "nodemon -r esm src/index.js",
+    "dev": "nodemon --exec babel-node src/index.js",
     "start-db": "docker-compose -f dev-dbs/docker-compose.yml up"
   }
 }
