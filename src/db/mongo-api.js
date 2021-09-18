@@ -1,25 +1,21 @@
-import connectDb from "./db";
-import { ObjectID } from "bson";
-export const mongoApiWarapper = async () => {
-  const { mdb } = await connectDb();
+import { ObjectId } from "bson";
+import { db } from "./db";
 
-  const createOne = ({ collectionName, schema, data }) =>
-    mdb.collection(collectionName, schema).insertOne(data);
-
-  const findAll = ({ collectionName, pipeline }) =>
-    mdb.collection(collectionName).aggregate(pipeline);
-
-  const findOne = ({ collectionName, id }) =>
-    mdb.collection(collectionName).findOne({ _id: ObjectID(id) });
-
-  return {
-    create: async (collectionName, schema, data) => {
-      const results = await createOne({
-        collectionName: collectionName,
-        schema: schema,
-        data: data,
-      });
-      return results;
-    },
-  };
+export const create = async (collectionName, schema, data) => {
+  const connection = db.getConnection();
+  const result = await connection
+    .collection(collectionName, schema)
+    .insertOne(data);
+  return result;
 };
+export const getOne = async (collectionName,id) => {
+    const connection = db.getConnection();
+    const result = await connection.collection(collectionName).findOne({_id: ObjectId(id)})
+    return result
+}
+
+export const getAll = async (collectionName) => {
+    const connection = db.getConnection();
+    const results = await connection.collection(collectionName).find({}).toArray();
+    return results;
+}

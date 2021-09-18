@@ -1,11 +1,11 @@
-import { Router } from 'express'
-import { createUser} from './userDAO'
+import { Router } from "express";
+import { create, getAll, getOne } from "./userController";
 
+const router = Router();
 
-const router = Router()
+router.route("/users").post(create).get(getAll);
 
-router.route('/users')
-    .post(createUser)
+router.route('/user/:id')
+.get(getOne)
 
-
-export default router
+export default router;
