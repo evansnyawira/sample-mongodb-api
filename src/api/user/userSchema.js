@@ -1,3 +1,4 @@
+export const collectionName = "user";
 export const userSchema = {
     validator: {
       $jsonSchema: {
@@ -6,7 +7,7 @@ export const userSchema = {
         properties: {
           name: {
             bsonType: "string",
-            description: "must be a string and is required",
+            description: "must be a string",
           },
           email: {
             bsonType: "string",
