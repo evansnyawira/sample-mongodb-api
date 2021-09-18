@@ -1,11 +1,12 @@
-import { create, getOne, getAll } from "../../db/mongo-api";
-import { userSchema } from "./userSchema";
+import { create, getOne, getAll, getOneById } from "../../db/mongo-api";
+import { AppError } from "../error/error";
+import { userSchema, collectionName } from "./userSchema";
 
-const collectionName = "user";
 export const createUser = async (data) => {
+  console.log(data);
   const user = await create(collectionName, userSchema, data);
   const id = user.insertedId;
-  const userData = await getOne(collectionName, id);
+  const userData = await getOneById(collectionName, id);
   return userData;
 };
 export const getUsers = async () => {
@@ -13,7 +14,10 @@ export const getUsers = async () => {
   return users;
 };
 
-export const getUser = async (id) => {
-  const user = await getOne(collectionName, id);
+export const getUser = async (email) => {     
+  const user = await getOne(collectionName, email);
+  if (!user) {
+    throw new AppError("User not found", 404);
+  }
   return user;
 };
